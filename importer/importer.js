@@ -3,11 +3,11 @@ const headers = require('./headers.js');
 module.exports = function importer(filePath) {
   return new Promise((resolve, reject) => {
     var basicCSV = require("basic-csv");
-    var data = [];
+    var transactions = [];
     var headerRow;
 
     basicCSV.readCSV(filePath, {
-      //dropHeader: true
+      /* dropHeader: true */
     }, (error, rows) => {
       if (error) {
         reject(error);
@@ -17,15 +17,15 @@ module.exports = function importer(filePath) {
         if (i === 0) {
           headerRow = row;
         } else {
-          var dataRow = {};
+          var transaction = {};
           headerRow.forEach((header, j) => {
-            dataRow[headers[header]] = row[j];
+            transaction[headers[header]] = row[j];
           });
-          data.push(dataRow);
+          transactions.push(transaction);
         }
       });
       
-      resolve(data);
+      resolve(transactions);
     });
   });
 };

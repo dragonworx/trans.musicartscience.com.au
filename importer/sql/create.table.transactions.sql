@@ -11,8 +11,6 @@ CREATE TABLE `transactions` (
   `credit` decimal(15,2) DEFAULT NULL,
   `balance` decimal(15,2) DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
-  `account` varchar(45) DEFAULT NULL,
-  `category` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=431 DEFAULT CHARSET=latin1;
 

@@ -1,4 +1,4 @@
-var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
+var pstyle = 'border: 1px solid #dfdfdf; padding: 4px;';
 $('#layout').w2layout({
     name: 'layout',
     padding: 4,
