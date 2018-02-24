@@ -1,2 +1,352 @@
+* {
+  box-sizing: border-box; }
+
 body {
-  background-color: #ccc; }
+  background-color: #303030;
+  margin: 0;
+  font-family: monospace; }
+
+calendar .transactions {
+  list-style: none;
+  padding: 0;
+  margin-left: 10px; }
+
+calendar .transactions-container {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  right: 10px;
+  bottom: 0;
+  overflow: auto; }
+
+calendar .transaction {
+  background-color: #535252;
+  color: #cecccc;
+  padding: 1px 1px;
+  border-bottom: 1px solid #3c3838;
+  border-top: 1px solid #7a7777; }
+  calendar .transaction .date {
+    background-color: rgba(0, 0, 0, 0.2);
+    font-size: 0.6em;
+    padding: 2px 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    min-width: 65px;
+    text-align: center; }
+  calendar .transaction .description b {
+    background-color: rgba(179, 149, 36, 0.94);
+    border-radius: 3px; }
+  calendar .transaction .amount {
+    border-radius: 5px;
+    min-width: 45px;
+    margin-right: 10px;
+    text-align: center;
+    color: #fff; }
+  calendar .transaction .amount.debit {
+    background-color: #9b0f15; }
+  calendar .transaction .amount.credit {
+    background-color: green; }
+
+calendar .transaction.search-match {
+  background-color: #826615; }
+
+calendar .range {
+  border-radius: 10px;
+  padding: 5px;
+  background-color: #286fa0;
+  color: #e0e0e0;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  right: 10px;
+  height: 30px;
+  text-align: center; }
+  calendar .range label {
+    margin-left: 10px;
+    display: inline-block;
+    white-space: nowrap; }
+  calendar .range select {
+    margin-left: 3px; }
+  calendar .range button {
+    margin-left: 3px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-color: #3f3f3f;
+    color: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc; }
+  calendar .range button.highlight {
+    background-color: #5a5a5a;
+    color: #fff;
+    border: 1px solid #fff; }
+  calendar .range .today {
+    border: none;
+    width: 20px;
+    height: 20px;
+    background: transparent url(../img/today.png) center no-repeat; }
+
+calendar .data {
+  border-radius: 10px;
+  padding: 5px;
+  padding: 0;
+  position: absolute;
+  left: 10px;
+  top: 50px;
+  right: 10px;
+  bottom: 10px; }
+  calendar .data .month {
+    position: relative;
+    display: inline-block;
+    width: 400px;
+    margin: 5px;
+    vertical-align: top;
+    background-color: #2f2f2f;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px; }
+    calendar .data .month .header {
+      position: relative;
+      background-color: rgba(255, 255, 255, 0.85);
+      height: 20px;
+      cursor: pointer;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px; }
+      calendar .data .month .header .year {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: #c2c3c9;
+        padding: 3px;
+        font-size: 0.8em;
+        height: 100%;
+        color: #525658;
+        border-top-left-radius: 5px; }
+      calendar .data .month .header .total {
+        border-radius: 5px;
+        float: right;
+        display: inline-block;
+        color: #fff;
+        padding: 1px;
+        text-align: center;
+        margin-right: 3px;
+        font-size: 0.9em;
+        margin-top: 2px; }
+      calendar .data .month .header .total.credit {
+        background-color: green; }
+      calendar .data .month .header .total.debit {
+        background-color: #9b0f15; }
+      calendar .data .month .header .name {
+        width: 50px;
+        height: 100%;
+        padding-top: 1px;
+        font-size: 1.2em;
+        position: absolute;
+        left: 50%;
+        margin-left: -25px;
+        text-align: center;
+        top: 0; }
+  calendar .data .month.selected .header {
+    background-color: #00d6ff;
+    color: #357384; }
+  calendar .data .days {
+    background-color: #3f3f3f;
+    height: 340px;
+    display: inline-block; }
+  calendar .data .dayOfWeek {
+    display: inline-block;
+    width: 57.14286px;
+    height: 28.57143px;
+    position: relative;
+    font-size: 0.85em;
+    text-align: center;
+    color: #0fcaff;
+    background-color: #2f2f2f;
+    padding-top: 8px; }
+  calendar .data .dayOfWeek.Sat, calendar .data .dayOfWeek.Sun {
+    background-color: #2f2f2f; }
+  calendar .data .day {
+    display: inline-block;
+    width: 57.14286px;
+    height: 57.14286px;
+    background-color: #5a5a5a;
+    position: relative;
+    color: #fff;
+    border: 1px outset #808080;
+    cursor: pointer; }
+    calendar .data .day .category-summary {
+      height: 4px; }
+      calendar .data .day .category-summary .category-label {
+        float: right;
+        width: 10px;
+        height: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-right-color: rgba(0, 0, 0, 0.5);
+        border-bottom-color: rgba(0, 0, 0, 0.5);
+        top: -2px;
+        left: 1px; }
+    calendar .data .day .dayNumber {
+      margin-top: 1px;
+      margin-left: 2px;
+      font-size: 0.8em;
+      text-shadow: #2C2C2C -1px -2px;
+      display: block;
+      overflow: hidden; }
+    calendar .data .day .summary {
+      padding: 2px;
+      border-radius: 5px;
+      right: 0;
+      bottom: 0;
+      position: absolute;
+      height: 20px; }
+    calendar .data .day .summary.debit {
+      background-color: #9b0f15; }
+    calendar .data .day .summary.credit {
+      background-color: green;
+      bottom: 22px; }
+  calendar .data .day.selected {
+    background-color: #2962d4;
+    border: 1px solid #00caff; }
+  calendar .data .day.today {
+    background-color: rgba(255, 0, 0, 0.5); }
+  calendar .data .search-match {
+    background-color: #826615; }
+  calendar .data .day.search-match .dayNumber {
+    text-shadow: #88704c -1px -2px; }
+  calendar .data .Sun {
+    background-color: #4c4c4c; }
+  calendar .data .Sat {
+    background-color: #4c4c4c; }
+  calendar .data .day.disabled {
+    background-color: #3f3f3f;
+    color: #7c7c7c; }
+  calendar .data .months {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    right: 0;
+    bottom: 30%;
+    overflow: auto;
+    background-color: #aaa;
+    height: 62%;
+    padding-bottom: 10px; }
+  calendar .data .details {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 288px;
+    background-color: #666;
+    width: 100%; }
+    calendar .data .details .shadow {
+      position: absolute;
+      left: 0;
+      top: -15px;
+      height: 15px;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0, transparent 100%);
+      /* W3C */
+      width: 100%; }
+    calendar .data .details .divider {
+      position: absolute;
+      left: 0;
+      top: -5px;
+      height: 5px;
+      background-color: #357384;
+      width: 100%;
+      border-top: 1px solid #9f9f9f;
+      cursor: ns-resize; }
+    calendar .data .details ul {
+      margin: 5px; }
+    calendar .data .details span {
+      display: inline-block;
+      margin-right: 5px; }
+    calendar .data .details label {
+      color: #fff;
+      font-size: 0.7em;
+      margin: 5px;
+      text-shadow: 1px 1px #000; }
+    calendar .data .details .options label {
+      font-size: 0.8em;
+      float: right;
+      background-color: rgba(255, 255, 255, 0.5);
+      margin: 0 10px 0 10px;
+      border-radius: 5px;
+      padding: 0 0 0 5px; }
+    calendar .data .details .count {
+      background-color: #317d87;
+      color: #fff;
+      border-radius: 5px;
+      margin-right: 5px;
+      min-width: 19px;
+      text-align: center; }
+    calendar .data .details .categories {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0 10px; }
+      calendar .data .details .categories .category {
+        padding: 3px;
+        margin-bottom: 2px;
+        border-bottom: 1px solid #414141;
+        background-color: #6a7a79;
+        padding-left: 25px;
+        position: relative; }
+        calendar .data .details .categories .category .label {
+          position: absolute;
+          width: 20px;
+          height: 100%;
+          left: 0;
+          top: 0;
+          background-color: rgba(0, 0, 0, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.5); }
+        calendar .data .details .categories .category .amount {
+          margin-right: 5px;
+          background-color: #36917a;
+          color: #fff;
+          min-width: 50px;
+          text-align: center;
+          border-radius: 5px; }
+        calendar .data .details .categories .category .amount.debit {
+          background-color: #9b0f15; }
+        calendar .data .details .categories .category .amount.credit {
+          background-color: green; }
+        calendar .data .details .categories .category .desc {
+          color: #fff; }
+  calendar .data .options {
+    background-color: #00d4b4;
+    height: 25px;
+    padding: 4px;
+    color: #e8e8e8;
+    text-shadow: 1px 1px #7d7d7d; }
+  calendar .data .overview {
+    height: 57px;
+    background-color: rgba(31, 101, 97, 0.5);
+    width: 100%;
+    position: relative; }
+    calendar .data .overview .bar-outer {
+      display: inline-block;
+      height: 100%;
+      position: relative; }
+      calendar .data .overview .bar-outer .bar-inner {
+        background-color: #a44949;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        cursor: help;
+        border-top: 1px solid #ee8080; }
+    calendar .data .overview .balance {
+      position: absolute;
+      top: 1px;
+      color: #fff; }
+    calendar .data .overview .balance.opening {
+      left: 2px; }
+    calendar .data .overview .balance.closing {
+      right: 2px; }
+
+calendar .search {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  height: 21px;
+  width: 25%;
+  border: none; }
+  calendar .search input[type="text"] {
+    width: 100%;
+    height: 100%; }

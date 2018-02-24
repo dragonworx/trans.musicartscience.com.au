@@ -16,8 +16,11 @@ var log = {
   completed: function (output) {
     console.log(cli.green(output || 'completed.'));
   },
+  warn: function (output) {
+    console.log(cli.yellow.bold(output || 'error.'));
+  },
   error: function (output) {
-    console.log(cli.red(output || 'error.'));
+    console.log(cli.red.bold(output || 'warn.'));
   }
 };
 

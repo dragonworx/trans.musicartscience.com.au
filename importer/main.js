@@ -1,52 +1,76 @@
 const path = require('path');
-
-const log = require('./log.js');
+const cli = require('cli-color');
+const log = require('../log.js');
 const importer = require('./importer.js');
-const db = require('./db.js');
 
-const filePath = './transactions/creditcard.csv';
+process.on('unhandledRejection', function(err) {
+  log.error(err.stack);
+});
 
-log.main(`Importing transactions from: "${filePath}" ...`);
+log.begin('Connecting to database...\n');
 
-importer(filePath).then((transactions) => {
-  log.begin('Connecting to database...');
-  db.connect();
+require('../database.js').then(db => {
   log.ok();
 
+  const filePath = './transactions/creditcard.csv';
+//  const filePath = './transactions/debitcard.csv';
+//  const filePath = './transactions/loan.csv';
+//  const filePath = './transactions/savings.csv';
 
-  log.begin('Purging existing data...');
-  db.deleteAll('transactions').then(() => {
-    log.ok();
+  log.main(`Importing transactions from: "${filePath}" ...`);
+
+  importer(filePath).then((transactions) => {
+    log.completed(`Processing ${transactions.length} transactions...`);
+
     let rowsAdded = 0;
+    let transactionsLength = transactions.length;
+    let minId = Number.MAX_VALUE;
+    let maxId = Number.MIN_VALUE;
 
-    transactions.forEach(function (transaction) {
-      let dateFields = transaction.date.split('/');
-      let date = dateFields[2] + dateFields[1] + dateFields[0];
-
-      let query = `INSERT INTO transactions (bsb, acc, transactions.date, transactions.desc, cheque, debit, credit, balance, type) VALUES(       
-            "${transaction.bsb}",
-            "${transaction.acc}",
-            "${date}",
-            "${transaction.desc}",
-            ${transaction.cheque || 0},
-            ${transaction.debit || 0},
-            ${transaction.credit || 0},
-            ${transaction.balance || 0},
-            "${transaction.type}"
-          )`;
-      
-      db.query(query).then((result) => {
-        rowsAdded++;
-        if (rowsAdded === transactions.length) {
-          log.completed(`(${rowsAdded}) rows added.`);
-          process.exit(0);
+    function processTransaction(transaction) {
+      db.transaction.findOne({
+        where: {
+          hash: transaction.hash
+        }
+      }).then((existingTransaction) => {
+        if (existingTransaction) {
+          log.warn(`Duplicate #${existingTransaction.id} for line ${transaction.line}: "${transaction.row.join(', ')}" (skipped)`);
+          processNextTransaction();
+        } else {
+          db.transaction.create({
+            bsb: transaction.bsb,
+            acc: transaction.acc,
+            date: transaction.date,
+            desc: transaction.desc,
+            cheque: transaction.cheque,
+            credit: transaction.credit,
+            debit: transaction.debit,
+            balance: transaction.balance,
+            type: transaction.type,
+            account: transaction.account,
+            hash: transaction.hash
+          }).then((trans) => {
+            minId = Math.min(minId, trans.id);
+            maxId = Math.max(maxId, trans.id);
+            rowsAdded++;
+            processNextTransaction();
+          });
         }
       });
-    });
+    }
 
+    function processNextTransaction() {
+      if (transactions.length) {
+        processTransaction(transactions.shift());
+      } else {
+        log.completed(`${Math.floor((rowsAdded / transactionsLength) * 100)}% (${rowsAdded}/${transactionsLength}) rows added, id #${minId} to #${maxId}`);
+        process.exit(0);
+      }
+    }
+
+    processNextTransaction();
   });
-
-}).catch((error) => {
-  db.end();
-  throw new Error(error.toString());
+}).catch(err => {
+  log.error(err);
+  process.exit(-1);
 });

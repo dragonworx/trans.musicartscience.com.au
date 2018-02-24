@@ -1,0 +1,511 @@
+@import 'variables';
+@import 'mixins';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #303030;
+  margin: 0;
+  font-family: monospace;
+}
+
+calendar {
+  .transactions {
+    list-style: none;
+    padding: 0;
+    margin-left: 10px;
+  }
+
+  .transactions-container {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    right: 10px;
+    bottom: 0;
+    overflow: auto;
+  }
+
+  .transaction {
+    background-color: #535252;
+    color: #cecccc;
+    padding: 1px 1px;
+    border-bottom: 1px solid #3c3838;
+    border-top: 1px solid #7a7777;
+
+    .date {
+      background-color: rgba(0, 0, 0, 0.2);
+      font-size: 0.6em;
+      padding: 2px 5px;
+      margin-right: 5px;
+      border-radius: 5px;
+      min-width: 65px;
+      text-align: center;
+    }
+
+    .description {
+      b {
+        background-color: rgba(179, 149, 36, 0.94);
+        border-radius: 3px;
+      }
+    }
+
+    .amount {
+      border-radius: 5px;
+      min-width: 45px;
+      margin-right: 10px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .amount.debit {
+      background-color: $debit;
+    }
+
+    .amount.credit {
+      background-color: $credit;
+    }
+  }
+
+  .transaction.search-match {
+    background-color: $search-match;
+  }
+
+  .range {
+    @include panel();
+    background-color: #286fa0;
+    color: #e0e0e0;
+    position: absolute;
+    left: $padding-inner;
+    top: $padding-inner;
+    right: $padding-inner;
+    height: $header-height;
+    text-align: center;
+
+    label {
+      margin-left: $padding-inner;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    select {
+      margin-left: $padding-control;
+    }
+
+    button {
+      margin-left: $padding-control;
+      cursor: pointer;
+      vertical-align: middle;
+      background-color: $day-bg-dark;
+      color: #fff;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button.highlight {
+      background-color: $day-bg;
+      color: #fff;
+      border: 1px solid #fff;
+    }
+
+    .today {
+      border: none;
+      width: 20px;
+      height: 20px;
+      background: transparent url(../img/today.png) center no-repeat;
+    }
+  }
+
+  .data {
+    @include panel();
+    padding: 0;
+    position: absolute;
+    left: $padding-inner;
+    top: ($padding-inner * 2) + $header-height;
+    right: $padding-inner;
+    bottom: $padding-inner;
+
+    .month {
+      position: relative;
+      display: inline-block;
+      width: $month-size;
+      margin: $month-padding;
+      vertical-align: top;
+      background-color: #2f2f2f;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+
+      .header {
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.85);
+        height: 20px;
+        cursor: pointer;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+
+        .year {
+          position: absolute;
+          left: 0;
+          top: 0;
+          background-color: #c2c3c9;
+          padding: 3px;
+          font-size: 0.8em;
+          height: 100%;
+          color: #525658;
+          border-top-left-radius: 5px;
+        }
+
+        .total {
+          border-radius: 5px;
+          float: right;
+          display: inline-block;
+          color: #fff;
+          padding: 1px;
+          text-align: center;
+          margin-right: 3px;
+          font-size: 0.9em;
+          margin-top: 2px;
+        }
+
+        .total.credit {
+          background-color: $credit;
+        }
+
+        .total.debit {
+          background-color: $debit;
+        }
+
+        .name {
+          width: $month-year-width;
+          height: 100%;
+          padding-top: 1px;
+          font-size: 1.2em;
+          position: absolute;
+          left: 50%;
+          margin-left: $month-year-width / 2 * -1;
+          text-align: center;
+          top: 0;
+        }
+      }
+    }
+
+    .month.selected {
+      .header {
+        background-color: #00d6ff;
+        color: #357384;
+      }
+    }
+
+    .days {
+      background-color: $day-bg-dark;
+      height: $month-height;
+      display: inline-block;
+    }
+
+    .dayOfWeek {
+      display: inline-block;
+      width: $day-size;
+      height: $day-size * 0.5;
+      position: relative;
+      font-size: 0.85em;
+      text-align: center;
+      color: #0fcaff;
+      background-color: $day-bg-title;
+      padding-top: 8px;
+    }
+
+    .dayOfWeek.Sat, .dayOfWeek.Sun {
+      background-color: $day-bg-title;
+    }
+
+    .day {
+      display: inline-block;
+      width: $day-size;
+      height: $day-size;
+      background-color: $day-bg;
+      position: relative;
+      color: #fff;
+      border: 1px outset #808080;
+      cursor: pointer;
+
+      .category-summary {
+        height: 4px;
+
+        .category-label {
+          float: right;
+          width: 10px;
+          height: 4px;
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          border-right-color: rgba(0, 0, 0, 0.5);
+          border-bottom-color: rgba(0, 0, 0, 0.5);
+          top: -2px;
+          left: 1px;
+        }
+      }
+
+      .dayNumber {
+        margin-top: 1px;
+        margin-left: 2px;
+        font-size: 0.8em;
+        text-shadow: #2C2C2C -1px -2px;
+        display: block;
+        overflow: hidden;
+      }
+
+      .summary {
+        padding: 2px;
+        border-radius: 5px;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        height: 20px;
+      }
+
+      .summary.debit {
+        background-color: $debit;
+      }
+
+      .summary.credit {
+        background-color: $credit;
+        bottom: 22px;
+      }
+    }
+
+    .day.selected {
+      background-color: #2962d4;
+      border: 1px solid #00caff;
+    }
+
+    .day.today {
+      background-color: rgba(255, 0, 0, 0.5)
+    }
+
+    .search-match {
+      background-color: $search-match;
+    }
+
+    .day.search-match .dayNumber {
+      text-shadow: #88704c -1px -2px;
+    }
+
+    .Sun {
+      background-color: $day-weekend;
+    }
+
+    .Mon {
+
+    }
+
+    .Tue {
+
+    }
+
+    .Wed {
+
+    }
+
+    .Thu {
+
+    }
+
+    .Fri {
+
+    }
+
+    .Sat {
+      background-color: $day-weekend;
+    }
+
+    .day.disabled {
+      background-color: $day-bg-dark;
+      color: #7c7c7c;
+    }
+
+    .months {
+      position: absolute;
+      top: 26px;
+      left: 0;
+      right: 0;
+      bottom: 30%;
+      overflow: auto;
+      background-color: #aaa;
+      height: 62%;
+      padding-bottom: 10px;
+
+      .options {
+
+      }
+    }
+
+    .details {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: $details-height;
+      background-color: #666;
+      width: 100%;
+
+      .shadow {
+        position: absolute;
+        left: 0;
+        top: -$shadow-height;
+        height: $shadow-height;
+        background: linear-gradient(0deg, rgba(0,0,0,0.2) 0, rgba(0,0,0,0) 100%);/* W3C */
+        width: 100%;
+      }
+
+      .divider {
+        position: absolute;
+        left: 0;
+        top: -$divider-height;
+        height: $divider-height;
+        background-color: #357384;
+        width: 100%;
+        border-top: 1px solid #9f9f9f;
+        cursor: ns-resize;
+      }
+
+      ul {
+        margin: 5px;
+      }
+
+      span {
+        display: inline-block;
+        margin-right: 5px;
+      }
+
+      label {
+        color: #fff;
+        font-size: 0.7em;
+        margin: 5px;
+        text-shadow: 1px 1px #000;
+      }
+
+      .options {
+        label {
+          font-size: 0.8em;
+          float: right;
+          background-color: rgba(255,255,255,0.5);
+          margin: 0 10px 0 10px;
+          border-radius: 5px;
+          padding: 0 0 0 5px;
+        }
+      }
+
+      .count {
+        background-color: #317d87;
+        color: #fff;
+        border-radius: 5px;
+        margin-right: 5px;
+        min-width: 19px;
+        text-align: center;
+      }
+
+      .categories {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0 10px;
+
+        .category {
+          padding: 3px;
+          margin-bottom: 2px;
+          border-bottom: 1px solid #414141;
+          background-color: #6a7a79;
+          padding-left: 25px;
+          position: relative;
+
+          .label {
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background-color: rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.5);
+          }
+
+          .amount {
+            margin-right: 5px;
+            background-color: #36917a;
+            color: #fff;
+            min-width: 50px;
+            text-align: center;
+            border-radius: 5px;
+          }
+
+          .amount.debit {
+            background-color: $debit;
+          }
+
+          .amount.credit {
+            background-color: $credit;
+          }
+
+          .desc {
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .options {
+      background-color: #00d4b4;
+      height: 25px;
+      padding: 4px;
+      color: #e8e8e8;
+      text-shadow: 1px 1px #7d7d7d;
+    }
+
+    .overview {
+      height: $overview-size;
+      background-color: rgba(31, 101, 97, 0.5);
+      width: 100%;
+      position: relative;
+
+      .bar-outer {
+        display: inline-block;
+        height: 100%;
+        position: relative;
+
+        .bar-inner {
+          background-color: #a44949;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          cursor: help;
+          border-top: 1px solid #ee8080;
+        }
+      }
+
+      .balance {
+        position: absolute;
+        top: 1px;
+        color: #fff;
+      }
+
+      .balance.opening {
+        left: 2px;
+      }
+
+      .balance.closing {
+        right: 2px;
+      }
+    }
+  }
+
+  .search {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    height: 21px;
+    width: 25%;
+    border: none;
+
+    input[type="text"] {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

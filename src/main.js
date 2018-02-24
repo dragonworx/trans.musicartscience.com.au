@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
+import './debug.js'
 import App from './jsx/App.jsx'
+import Transforms from './transforms.js'
 
-var app = window['app'] = <App />;
+json('/js/config.json').then((config) => {
+  window.config = Transforms.config = config;
+  window['app'] = ReactDOM.render(<App config={config}/>, document.getElementById('main'));
 
-ReactDOM.render(app, document.getElementById('main'));
-
-$.getJSON('/test', {x:1}, function (data) {
-  alert(JSON.stringify(data));
+  setTimeout(() => $('#load').trigger('click'), 150);
 });

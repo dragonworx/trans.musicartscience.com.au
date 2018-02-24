@@ -1,21 +1,26 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import Calendar from './calendar/Calendar.jsx'
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: null
+            selectedDay: null,
+            selectedMonth: null,
+            searchText: null,
+            searchMatches: null
         };
     }
-
-    onClick(e) {
-        console.log(this, e);
+    
+    getAccount() {
+        return this.refs.calendar.getAccount();
     }
 
     render() {
         return (
-            <p onClick={this.onClick.bind(this)}>Hello!</p>
+            <Calendar ref="calendar" config={this.props.config} app={this}></Calendar>
         );
     }
 }

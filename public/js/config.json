@@ -1,0 +1,32 @@
+{
+  "accounts": {
+    "creditcard": {
+      "limit": 6000,
+      "categories": {
+        "Coles": ["COLES", "debit", "red"],
+        "Georges": ["GEORGES FRUIT", "debit", "darkGreen"],
+        "Fruit Shop": ["FRESKO FRUIT", "debit"],
+        "Chemist": ["PHARMACY|VITAMINS|CHEMIST", "debit"]
+      }
+    },
+    "debitcard": {
+      "limit": null
+    },
+    "loan": {
+      "limit": 570000
+    },
+    "savings": {
+      "limit": 100000,
+      "categories": {
+        "Tax": ["ATO", "debit"],
+        "Car": ["ST.GEORGE BANK", "debit"],
+        "Loan": ["PERIODICAL PAYMENT TO COMPLETE VARIABLE HL", "debit"],
+        "Transfer Credit": ["IB TRANSFER", "credit"],
+        "Transfer Debit": ["IB TRANSFER", "debit"]
+      }
+    }
+  },
+  "transforms": [
+
+  ]
+}

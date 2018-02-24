@@ -8,7 +8,6 @@ var cli = require('cli-color');
 var log = require('./log');
 
 var indexRoute = require('./routes/index');
-var apiRoute = require('./routes/api');
 
 var app = express();
 
@@ -25,7 +24,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRoute);
-app.use('/api', apiRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -52,6 +50,6 @@ app.use(function(err, req, res, next) {
 
 app.listen(3000);
 
-log.begin('trans.musicartscience.com.au');
+log.begin('test');
 
 module.exports = app;
